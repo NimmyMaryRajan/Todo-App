@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="auth">
+  	<div class="card" style="max-width: 105rem;">
+        <div class="card__task" >
+
+            {% if request.user.is_authenticated %}
+
+                <div class="tasklisting">
+                    <div
+                        class="auth__header"><h5 > Tasks </h5>
+                    </div>
+
+                    {% for task in incomplete %}
+                        <p style="padding-bottom: 7px;">
+                            <form action="" method="post">
+                            {% csrf_token %}
+
+                                    <button class="btn-formatting" name="markAsCompleted{{task}}">
+                                        ☐
+                                    </button>
+
+                                    <a href="{% url 'detail' task.id %}" class="list-formatting"> {{task.task_name}}</a>
+                         {% if task.due_date != None %}
+                    {% if Today > task.due_date %}
+                                    <p class="dueDate-intendation-expired"> <i class="bi bi-clock-fill expired"></i> {{task.due_date}} </p>
+                                    {% else %}
+                                    <p class="dueDate-intendation"> <i class="bi bi-clock-fill"></i> {{task.due_date}} </p>
+                                    {% endif %}
+                    {% endif %}
+
+
+                            </form>
+                        </p>
+
+                    {% empty %}
+                        <p style="margin-left: 10vmin;"> No incomplete tasks </p>
+
+                    {% endfor %}
+
+                    <div class="auth__header">
+                        <h6> Tasks completed </h6>
+                    </div>
+
+                    {% for task in completed %}
+                       <p style="padding-bottom: 10px;">
+
+                           <form action="" method="post">
+                                {% csrf_token %}
+
+                                    <button class="btn-formatting" name="markAsIncomplete{{task}}">
+                                        ☑
+                                    </button>
+
+                                    <a href="{% url 'detail' task.id %}" class="list-formatting">
+                                        {{task.task_name}}
+                                    </a>
+                      {% if task.due_date != None %}
+                    {% if Today > task.due_date %}
+                                    <p class="dueDate-intendation-expired"> <i class="bi bi-clock-fill expired"></i> {{task.due_date}} </p>
+                                    {% else %}
+                                    <p class="dueDate-intendation"> <i class="bi bi-clock-fill"></i> {{task.due_date}} </p>
+                                    {% endif %}
+                    {% endif %}
+                    </form>
+                       </p>
+                    {% empty %}
+                     <p style="margin-left: 10vmin;"> None </p>
+                    {% endfor %}
+
+
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}"> Login</a>
+            {% endif %}
+            <p> <a class="btn btn--sub btn--lg" href="new_task"><i class="im im-plus"></i>+ Add New Task</a> </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

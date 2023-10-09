@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+    <!-- Main Section -->
+<main class="formPage my-xl">
+        <div class="content-box">
+            <div class="formWrapper">
+                <a class="backButton" href="{% url 'home' %}"> <i class="fa fa-angle-left"></i>     </a>
+                <br>
+                <form class="form" method="POST">
+                    {% csrf_token %}
+                    <!-- Input:Text -->
+                    <div class="form__field">
+                        {% for field in obj %}
+                        {% if field.name == 'star' or field.name == 'completed' %}
+                                <div class="form__field--checkbox" style="margin: 1rem" >
+                                    {{field}}
+                                    <label>{{field.label}} </label>
+                                </div>
+                             {% else %}
+                                  <label>{{field.label}} </label>
+                                    {{field}}
+                            {% endif %}
+                          {% endfor %}
+                    </div>
+
+
+
+
+                    <input class="btn btn--sub btn--lg  my-md" type="submit" value="Save" name="save"/>
+                    <input class="btn btn--sub btn--lg  my-md" type="submit" value="Delete" name="delete" />
+                </form>
+            </div>
+        </div>
+    </main>
+
+ {% endblock %}
+
